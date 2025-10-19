@@ -1,16 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
+	"test-todo-app/resources"
 
 	"github.com/gorilla/mux"
 )
 
 func AllTodos(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "alltodos")
+	json.NewEncoder(w).Encode(resources.GetAllTodos())
 }
 
 func TodoRouter(todorouter *mux.Router) {
-	todorouter.HandleFunc("/", AllTodos)
+	todorouter.HandleFunc("/", AllTodos).Methods("GET")
 }
