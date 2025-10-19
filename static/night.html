@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<script>
+    setTimeout(()=> {
+        const currHours = new Date().getHours();
+        document.getElementById("nightday").innerHTML = currHours >= 22 || currHours < 6 ? "nighttime ✨🌜" : "daytime 🌴☀️";
+    },1000);
+</script>
+<html>
+    <head><title>howdy</title></head>
+    <body>
+        <p>It's <span id="nightday"></spans></p>
+        <a href="/">Get back</a>
+    </body>
+</html>
