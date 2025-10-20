@@ -15,7 +15,7 @@ func main() {
 	r := mux.NewRouter()
 	r.Handle("/", fs)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
-	todorouter := r.PathPrefix("/todos").Subrouter()
+	todorouter := r.PathPrefix("/api/todos").Subrouter()
 	TodoRouter(todorouter)
 
 	http.ListenAndServe(":80", r)

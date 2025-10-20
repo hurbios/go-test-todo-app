@@ -1,14 +1,33 @@
 <!DOCTYPE html>
-<script>
-    setTimeout(()=> {
-        const currHours = new Date().getHours();
-        document.getElementById("nightday").innerHTML = currHours >= 22 || currHours < 6 ? "nighttime ✨🌜" : "daytime 🌴☀️";
-    },1000);
-</script>
 <html>
     <head><title>howdy</title></head>
     <body>
         <p>It's <span id="nightday"></spans></p>
+        <p id="description"></p>
+        <ul id="todolist"></ul>
         <a href="/">Get back</a>
     </body>
+    <script>
+        const currHours = new Date().getHours();
+        const nightOrDay = currHours >= 22 || currHours < 6 ? "night" : "day";
+        document.getElementById("nightday").innerHTML = nightOrDay === "night" ? "nighttime ✨🌜" : "daytime 🌴☀️";
+        document.getElementById("description").innerHTML = "Here are your todo items:";
+        const todolist = document.getElementById("todolist");
+        fetch(`/api/todos/cat/${nightOrDay}`)
+            .then(res => res.ok && res.json())
+            .then(todos => {
+                todos.forEach(todo => {
+                    const listobj = document.createElement('li');
+                    const a = document.createElement('a')
+                    a.appendChild(document.createTextNode(`${todo.title} - ${todo.body}`));
+                    a.href = `/api/todos/${todo.id}`;
+                    listobj.appendChild(a);
+                    todolist.appendChild(listobj);
+                });
+            })
+            .catch(e => {
+                console.log(e);
+                document.getElementById("description").innerHTML = "There was an error fetching your todo items...";
+            });
+</script>
 </html>
