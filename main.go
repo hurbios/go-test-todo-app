@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"test-todo-app/middlewares"
+
 	"github.com/gorilla/mux"
 )
 
@@ -13,6 +15,7 @@ func main() {
 	fs := http.FileServer(http.Dir("static/"))
 
 	r := mux.NewRouter()
+	r.Use(middlewares.SimpleLogger)
 	r.Handle("/", fs)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 	todorouter := r.PathPrefix("/api/todos").Subrouter()
