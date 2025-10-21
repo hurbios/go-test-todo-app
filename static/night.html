@@ -13,17 +13,21 @@
         document.getElementById("nightday").innerHTML = nightOrDay === "night" ? "nighttime ✨🌜" : "daytime 🌴☀️";
         document.getElementById("description").innerHTML = "Here are your todo items:";
         const todolist = document.getElementById("todolist");
-        fetch(`/api/todos/cat/${nightOrDay}`)
+        fetch(`/api/todos/?cat=${nightOrDay}`)
             .then(res => res.ok && res.json())
             .then(todos => {
-                todos.forEach(todo => {
-                    const listobj = document.createElement('li');
-                    const a = document.createElement('a')
-                    a.appendChild(document.createTextNode(`${todo.title} - ${todo.body}`));
-                    a.href = `/api/todos/${todo.id}`;
-                    listobj.appendChild(a);
-                    todolist.appendChild(listobj);
-                });
+                if(todos) {
+                    todos.forEach(todo => {
+                        const listobj = document.createElement('li');
+                        const a = document.createElement('a')
+                        a.appendChild(document.createTextNode(`${todo.title} - ${todo.body}`));
+                        a.href = `/api/todos/${todo.id}`;
+                        listobj.appendChild(a);
+                        todolist.appendChild(listobj);
+                    })
+                } else {
+                    document.getElementById("description").innerHTML = "No todo items found.";
+                };
             })
             .catch(e => {
                 console.log(e);

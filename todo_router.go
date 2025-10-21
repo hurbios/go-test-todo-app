@@ -18,20 +18,20 @@ func SetGetHeaders(f http.HandlerFunc) http.HandlerFunc {
 }
 
 func AllTodos(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(resources.GetAllTodos())
-}
-
-func AllTodosInCategory(w http.ResponseWriter, r *http.Request) {
+	cat := r.URL.Query().Get("cat")
 	alltodos := resources.GetAllTodos()
-	vars := mux.Vars(r)
 
-	var todosa []resources.Todo
-	for i := 0; i < len(alltodos); i++ {
-		if alltodos[i].Category == vars["cat"] {
-			todosa = append(todosa, alltodos[i])
+	if cat != "" {
+		var alltodosincategory []resources.Todo
+		for i := 0; i < len(alltodos); i++ {
+			if alltodos[i].Category == cat {
+				alltodosincategory = append(alltodosincategory, alltodos[i])
+			}
 		}
+		json.NewEncoder(w).Encode(alltodosincategory)
+	} else {
+		json.NewEncoder(w).Encode(alltodos)
 	}
-	json.NewEncoder(w).Encode(todosa)
 }
 
 func OneTodo(w http.ResponseWriter, r *http.Request) {
@@ -55,5 +55,4 @@ func OneTodo(w http.ResponseWriter, r *http.Request) {
 func TodoRouter(todorouter *mux.Router) {
 	todorouter.HandleFunc("/", SetGetHeaders(AllTodos)).Methods("GET")
 	todorouter.HandleFunc("/{id}", SetGetHeaders(OneTodo)).Methods("GET")
-	todorouter.HandleFunc("/cat/{cat}", SetGetHeaders(AllTodosInCategory)).Methods("GET")
 }
