@@ -21,5 +21,5 @@ func main() {
 	todorouter := r.PathPrefix("/api/todos").Subrouter()
 	TodoRouter(todorouter)
 
-	http.ListenAndServe(":80", r)
+	http.ListenAndServe(":8080", r)
 }

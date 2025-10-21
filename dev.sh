@@ -1,1 +1,1 @@
-docker build -t test-todo-app . && docker run -it -p 8080:80 --rm --name test-todo-app-container test-todo-app
+docker build -f Dockerfile.dev -t test-todo-app . && docker run -it -p 8080:8080 -v $(pwd):/app --rm --name test-todo-app-container test-todo-app
