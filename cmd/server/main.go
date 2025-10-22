@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"test-todo-app/middlewares"
+	"test-todo-app/internal/routes"
+	"test-todo-app/pkg/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -12,14 +13,14 @@ import (
 func main() {
 	fmt.Println("Good evening!")
 
-	fs := http.FileServer(http.Dir("static/"))
+	fs := http.FileServer(http.Dir("web/static/"))
 
 	r := mux.NewRouter()
-	r.Use(middlewares.SimpleLogger)
+	r.Use(middleware.SimpleLogger)
 	r.Handle("/", fs)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 	todorouter := r.PathPrefix("/api/todos").Subrouter()
-	TodoRouter(todorouter)
+	routes.TodoRouter(todorouter)
 
 	http.ListenAndServe(":8080", r)
 }

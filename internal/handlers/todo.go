@@ -1,28 +1,20 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"test-todo-app/resources"
+	"test-todo-app/internal/storage"
 
 	"github.com/gorilla/mux"
 )
 
-func SetGetHeaders(f http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		f(w, r)
-	}
-}
-
 func AllTodos(w http.ResponseWriter, r *http.Request) {
 	cat := r.URL.Query().Get("cat")
-	alltodos := resources.GetAllTodos()
+	alltodos := storage.GetAllTodos()
 
 	if cat != "" {
-		var alltodosincategory []resources.Todo
+		var alltodosincategory []storage.Todo
 		for i := 0; i < len(alltodos); i++ {
 			if alltodos[i].Category == cat {
 				alltodosincategory = append(alltodosincategory, alltodos[i])
@@ -41,7 +33,7 @@ func OneTodo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad id", http.StatusBadRequest)
 		return
 	}
-	alltodos := resources.GetAllTodos()
+	alltodos := storage.GetAllTodos()
 
 	for i := 0; i < len(alltodos); i++ {
 		if alltodos[i].Id == id {
@@ -50,9 +42,4 @@ func OneTodo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	http.Error(w, "Id not found", http.StatusNotFound)
-}
-
-func TodoRouter(todorouter *mux.Router) {
-	todorouter.HandleFunc("/", SetGetHeaders(AllTodos)).Methods("GET")
-	todorouter.HandleFunc("/{id}", SetGetHeaders(OneTodo)).Methods("GET")
 }
