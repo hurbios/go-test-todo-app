@@ -1,0 +1,1 @@
+docker build -t test-build-todo-app . && docker run -p 80:80 --rm test-build-todo-app

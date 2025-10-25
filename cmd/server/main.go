@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"test-todo-app/internal/routes"
 	"test-todo-app/pkg/middleware"
@@ -18,6 +19,10 @@ var (
 
 func main() {
 	fmt.Println("Good evening!")
+	port := "8080"
+	if envPort, ok := os.LookupEnv("PORT"); ok {
+		port = envPort
+	}
 
 	fs := http.FileServer(http.Dir("web/static/"))
 
@@ -30,5 +35,6 @@ func main() {
 	todorouter := r.PathPrefix("/api/todos").Subrouter()
 	routes.TodoRouter(store, todorouter)
 
-	http.ListenAndServe(":8080", r)
+	fmt.Println("Server running on PORT", port)
+	http.ListenAndServe(":"+port, r)
 }
