@@ -3,10 +3,8 @@ package routes
 import (
 	"net/http"
 	"test-todo-app/internal/handlers"
-	"test-todo-app/pkg/middleware"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 )
 
 func SetGetHeaders(f http.HandlerFunc) http.HandlerFunc {
@@ -17,7 +15,7 @@ func SetGetHeaders(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func TodoRouter(store *sessions.CookieStore, todorouter *mux.Router) {
-	todorouter.HandleFunc("/", middleware.Authenticate(store, SetGetHeaders(handlers.AllTodos))).Methods("GET")
-	todorouter.HandleFunc("/{id}", middleware.Authenticate(store, SetGetHeaders(handlers.OneTodo))).Methods("GET")
+func TodoRouter(todorouter *mux.Router) {
+	todorouter.HandleFunc("/", SetGetHeaders(handlers.AllTodos)).Methods("GET")
+	todorouter.HandleFunc("/{id}", SetGetHeaders(handlers.OneTodo)).Methods("GET")
 }
