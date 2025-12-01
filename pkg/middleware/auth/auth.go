@@ -1,4 +1,4 @@
-package middleware
+package auth
 
 import (
 	"fmt"
@@ -6,6 +6,10 @@ import (
 
 	"github.com/gorilla/sessions"
 )
+
+type User struct {
+	ID int
+}
 
 func Login(store *sessions.CookieStore, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -54,6 +58,8 @@ func Authenticate(store *sessions.CookieStore) func(http.Handler) http.Handler {
 				return
 			}
 
+			ctx := WithUser(r.Context(), &User{ID: 1})
+			r = r.WithContext(ctx)
 			next.ServeHTTP(w, r)
 		})
 	}

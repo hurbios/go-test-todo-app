@@ -27,5 +27,23 @@ func GetAllTodos() []Todo {
 		Owner:     1,
 		Category:  "day",
 	})
+
+	todos = append(todos, Todo{
+		Id:        3,
+		Title:     "day note for user2",
+		Body:      "Hey day note...",
+		CreatedAt: "2025-12-01",
+		Owner:     2,
+		Category:  "day",
+	})
+
+	todos = append(todos, Todo{
+		Id:        4,
+		Title:     "night note for user2",
+		Body:      "Hey night note...",
+		CreatedAt: "2025-12-01",
+		Owner:     2,
+		Category:  "night",
+	})
 	return todos
 }
